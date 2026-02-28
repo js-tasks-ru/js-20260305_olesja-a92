@@ -115,6 +115,29 @@ jspm_packages/
 # Typescript v1 declaration files
 typings/
 
+# TypeScript build output (module sources)
+04-oop-basic-intro-to-ts/**/src/**/*.js
+04-oop-basic-intro-to-ts/**/src/**/*.js.map
+04-oop-basic-intro-to-ts/**/src/**/*.d.ts
+05-dom-document-loading/**/src/**/*.js
+05-dom-document-loading/**/src/**/*.js.map
+05-dom-document-loading/**/src/**/*.d.ts
+06-events-practice/**/src/**/*.js
+06-events-practice/**/src/**/*.js.map
+06-events-practice/**/src/**/*.d.ts
+07-forms-fetch-api/**/src/**/*.js
+07-forms-fetch-api/**/src/**/*.js.map
+07-forms-fetch-api/**/src/**/*.d.ts
+08-async-code-fetch-api/**/src/**/*.js
+08-async-code-fetch-api/**/src/**/*.js.map
+08-async-code-fetch-api/**/src/**/*.d.ts
+09-tests-for-frontend-apps/**/src/**/*.js
+09-tests-for-frontend-apps/**/src/**/*.js.map
+09-tests-for-frontend-apps/**/src/**/*.d.ts
+10-routes-browser-history-api/**/src/**/*.js
+10-routes-browser-history-api/**/src/**/*.js.map
+10-routes-browser-history-api/**/src/**/*.d.ts
+
 # Optional npm cache directory
 .npm
 
@@ -143,3 +166,5 @@ teacher.karma.conf.js
 
 teacher*
 TODO.md
+
+GEMINI.md

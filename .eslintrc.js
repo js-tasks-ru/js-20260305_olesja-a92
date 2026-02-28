@@ -1,13 +1,24 @@
 module.exports = {
   env: {
     browser: true,
-    es6: true,
-    jest: true
+    es2022: true,
+    node: true
   },
-  parser: 'babel-eslint',
   parserOptions: {
-    ecmaVersion: 2020,
+    ecmaVersion: 2022,
     sourceType: 'module',
+  },
+  globals: {
+    afterAll: 'readonly',
+    afterEach: 'readonly',
+    beforeAll: 'readonly',
+    beforeEach: 'readonly',
+    describe: 'readonly',
+    expect: 'readonly',
+    fetchMock: 'readonly',
+    it: 'readonly',
+    test: 'readonly',
+    vi: 'readonly'
   },
   rules: {
     'no-debugger': 'warn',
