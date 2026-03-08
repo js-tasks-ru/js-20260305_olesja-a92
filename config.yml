@@ -4,3 +4,5 @@ git:
   copy:
     - '*.*'
     - '.github/**/*.*'
+    - 'shared/**/*.*'
+    - 'scripts/**/*.*'
