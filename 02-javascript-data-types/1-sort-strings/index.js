@@ -5,9 +5,12 @@
  * @returns {string[]}
  */
 export function sortStrings(arr, param = 'asc') {
-	let returnedArr = arr.slice();
+	const returnedArr = arr.slice();
+	const directions = { asc: 1, desc: -1 };
+	if(directions[param] === undefined) throw new Error("Неизвестное значение param!");
+	
 	returnedArr.sort( (a,b) => {
-		 return a.localeCompare(b, ["ru","en"], {caseFirst: "upper"}) * (param==='desc'?-1:1);
+		 return a.localeCompare(b, ["ru","en"], {caseFirst: "upper"}) * directions[param];
 	});
 	
 	return returnedArr;
