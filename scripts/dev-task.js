@@ -31,7 +31,8 @@ if (!taskRelative || taskRelative.startsWith('..')) {
 const binSuffix = process.platform === 'win32' ? '.cmd' : '';
 const viteBin = resolve(projectRoot, 'node_modules', '.bin', `vite${binSuffix}`);
 const vite = spawn(viteBin, [viteRoot], {
-  stdio: 'inherit'
+  stdio: 'inherit',
+  shell: true,
 });
 
 const openHint = existsSync(taskSrcRoot) ? '/' : `/${taskRelative}/`;
