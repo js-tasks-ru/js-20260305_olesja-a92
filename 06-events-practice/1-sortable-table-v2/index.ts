@@ -131,13 +131,13 @@ export default class SortableTable {
       } else return 0;
     });
 
-    this.bodyElement.innerHTML = this.renderRows();
+    this.bodyElement.innerHTML = this.renderRows()??'';
     this.headerElement.querySelectorAll('[data-order]')?.forEach(el => {
       el.removeAttribute('data-order');
-      el.querySelector('[data-element="arrow"]').remove();
+      el.querySelector('[data-element="arrow"]')?.remove();
     })
     this.headerElement.querySelector<HTMLDivElement>(`[data-id="${field}"]`)?.setAttribute('data-order',order);
-    this.headerElement.querySelector<HTMLDivElement>(`[data-id="${field}"]`).append(this.arrowElement);
+    this.headerElement.querySelector<HTMLDivElement>(`[data-id="${field}"]`)?.append(this.arrowElement);
   }
 
   private onClick = (event: Event) => {

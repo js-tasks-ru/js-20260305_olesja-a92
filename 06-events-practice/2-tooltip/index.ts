@@ -1,7 +1,7 @@
 import {createElement} from "../../shared/utils/create-element";
 
 export default class Tooltip {
-  public element: HTMLElement | null;
+  public element: HTMLElement | null = null;
   private static instance: Tooltip | null = null;
   private paddingTooltip: number = 10;
 
@@ -23,7 +23,7 @@ export default class Tooltip {
     document.addEventListener('pointerover', this.onPointerOver);
   }
 
-  private render(html: string){
+  public render(html: string){
     if(!this.element){
       return;
     }

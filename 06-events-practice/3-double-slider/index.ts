@@ -18,7 +18,7 @@ export default class DoubleSlider {
   public toElement: HTMLSpanElement | null;
   public thumbLeft: HTMLSpanElement | null;
   public thumbRight: HTMLSpanElement | null;
-  public activeThumb: HTMLSpanElement | null;
+  public activeThumb: HTMLSpanElement | null = null;
   public innerElement: HTMLDivElement | null;
   public spanProgress: HTMLSpanElement | null;
   public min: number;
