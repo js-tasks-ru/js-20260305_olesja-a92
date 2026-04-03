@@ -25,6 +25,7 @@ export default class DoubleSlider {
   public max: number;
   public from: number;
   public to: number;
+  public shiftX: number;
 
   constructor(private options: Options = {}) {
     this.min = this.options.min??0;
@@ -62,10 +63,13 @@ export default class DoubleSlider {
   }
 
   private initListeners(): void{
-    document.addEventListener("pointerdown", this.onDown);
+    if(!this.element){
+      return;
+    }
+    this.element.addEventListener("pointerdown", this.onDown);
   }
 
-  private onDown = (event: Event) => {
+  private onDown = (event: PointerEvent) => {
     const target = event.target as HTMLElement;
     if(!("tagName" in target)) {
       return;
@@ -75,6 +79,9 @@ export default class DoubleSlider {
       return;
     }
     this.activeThumb = target;
+    //тесты не дают пройти такой функции
+    //this.activeThumb.setPointerCapture(event.pointerId);
+    this.shiftX = this.activeThumb.offsetWidth/2;
 
     document.addEventListener("pointermove", this.onMove);
     document.addEventListener("pointerup", this.onUp, {once: true});
@@ -90,7 +97,7 @@ export default class DoubleSlider {
 
     if(this.activeThumb.dataset.element === 'thumbRight'){
       const leftPercent = parseFloat(this.thumbLeft.style.left);
-      const percentRight = (inner.right - clientX) / inner.width * 100;
+      const percentRight = (inner.right - clientX  + this.shiftX) / inner.width * 100;
 
       if (percentRight + leftPercent > 100 || percentRight < 0) {
         return;
@@ -102,7 +109,7 @@ export default class DoubleSlider {
       this.spanProgress.style.right = `${percentRight}%`;
     } else if(this.activeThumb.dataset.element === 'thumbLeft'){
       const rightPercent = parseFloat(this.thumbRight.style.right);
-      const percentLeft =  (clientX - inner.left) / inner.width * 100;
+      const percentLeft =  (clientX - inner.left  + this.shiftX) / inner.width * 100;
 
       if (percentLeft + rightPercent > 100 || percentLeft < 0) {
         return;
@@ -134,6 +141,10 @@ export default class DoubleSlider {
   }
 
   public destroy(){
+    if(!this.element) return;
+    this.element.removeEventListener("pointerdown", this.onDown);
+    document.removeEventListener('pointermove', this.onMove);
+    document.removeEventListener('pointerup', this.onUp);
     this.remove();
     this.element = null;
     this.activeThumb = null;
@@ -143,8 +154,5 @@ export default class DoubleSlider {
     this.spanProgress = null;
     this.fromElement = null;
     this.toElement = null;
-    document.removeEventListener("pointerdown", this.onDown);
-    document.removeEventListener('pointermove', this.onMove);
-    document.removeEventListener('pointerup', this.onUp);
   }
 }

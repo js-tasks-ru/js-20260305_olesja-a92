@@ -112,6 +112,7 @@ export default class SortableTable {
     if(!this.bodyElement) return;
     if(!this.headerElement) return;
     if(!this.arrowElement) return;
+    if(!this.options.data) return;
 
     const directions = { asc: 1, desc: -1 };
     const column = this.headersConfig.find(item => item.id === field && item.sortable === true);
@@ -119,7 +120,7 @@ export default class SortableTable {
 
     const customSorting = column.customSorting;
 
-    this.options.data?.sort((rowA, rowB) => {
+    this.options.data = [...this.options.data].sort((rowA, rowB) => {
       if (typeof rowA[field] === 'undefined' || typeof rowB[field] === 'undefined') return 0;
 
       if (column['sortType'] === 'string') {
