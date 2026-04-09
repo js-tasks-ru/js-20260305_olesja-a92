@@ -64,11 +64,14 @@ export default class RangePicker {
       const dayDate = new Date(date.getFullYear(), date.getMonth(), n);
       const dataValue = dayDate.toISOString();
       const styleFrom = n===1 ? `style="--start-from: ${startFrom}"` : '';
-
-      const rangeClass = this.from && this.isSameDay(dayDate, this.from) ? 'rangepicker__selected-from' :
-        (this.to && this.isSameDay(dayDate, this.to) ? 'rangepicker__selected-to' :
-        (dayDate > this.from && this.to && this.from && dayDate < this.to ? 'rangepicker__selected-between': ''));
-
+      let rangeClass = '';
+      if(this.from) {
+        rangeClass = this.isSameDay(dayDate, this.from) ? 'rangepicker__selected-from' : rangeClass;
+        if (this.from && this.to){
+          rangeClass = this.isSameDay(dayDate, this.to) ? 'rangepicker__selected-to' :
+            (dayDate > this.from && dayDate < this.to ? 'rangepicker__selected-between' : rangeClass);
+        }
+      }
       calendarHtml += `<button type="button" class="rangepicker__cell ${rangeClass}" ${styleFrom} data-value="${dataValue}">${n}</button>`;
     }
     calendarHtml += '</div></div>';
@@ -148,8 +151,11 @@ export default class RangePicker {
         );
       });
       target.classList.add('rangepicker__selected-from');
-
     } else {
+      if(!this.from){
+        return;
+      }
+
       if (date < this.from) {
         this.to = this.from;
         this.from = date;
@@ -164,8 +170,8 @@ export default class RangePicker {
         detail: { from: this.from, to: this.to }
       }));
 
-      const fromDate = this.from.toLocaleString("ru", this.DateOptions);
-      const toDate = this.to.toLocaleString("ru", this.DateOptions);
+      const fromDate = this.from?.toLocaleString("ru", this.DateOptions) || '';
+      const toDate = this.to?.toLocaleString("ru", this.DateOptions) || '';
       const fromSpan = this.inputElement?.querySelector<HTMLSpanElement>('[data-element="from"]');
       const toSpan = this.inputElement?.querySelector<HTMLSpanElement>('[data-element="to"]');
 

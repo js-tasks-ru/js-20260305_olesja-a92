@@ -44,6 +44,10 @@ interface Product {
   discount: number;
 }
 
+interface SaveResult {
+  id: string;
+}
+
 export default class ProductForm {
   productId?: string;
   element: HTMLElement | null = null;
@@ -121,13 +125,13 @@ export default class ProductForm {
      [this.categories, this.product] = await Promise.all([
       fetchJson(`${BACKEND_URL}/api/rest/categories?_sort=weight&_refs=subcategory`),
       this.productId ? fetchJson(`${BACKEND_URL}/api/rest/products?id=${this.productId}`) : Promise.resolve([])
-    ]);
+    ]) as [Category[], Product[]];;
 
     this.element = createElement(this.template);
     this.form = this.element.querySelector<HTMLFormElement>('[data-element="productForm"]');
 
     if(!this.form){
-      return;
+      return null;
     }
 
     this.form.addEventListener('submit', this.onSubmit);
@@ -148,7 +152,8 @@ export default class ProductForm {
       (this.form.querySelector('#quantity') as HTMLInputElement).value = String(product.quantity);
       (this.form.querySelector('#status') as HTMLSelectElement).value = String(product.status);
       (this.form.querySelector('#price') as HTMLInputElement).value = String(product.price);
-      this.form.querySelector('[data-element="imageListContainer"]').innerHTML = this.renderImages(product.images);
+      const imageContainer = this.form.querySelector('[data-element="imageListContainer"]');
+      if (imageContainer) imageContainer.innerHTML = this.renderImages(product.images);
     }
 
     return this.element;
@@ -215,7 +220,7 @@ export default class ProductForm {
         method: this.productId ? 'PATCH' : 'PUT',
         body: JSON.stringify(product),
         headers: {'Content-Type': 'application/json'}
-      });
+      }) as SaveResult;
       const eventName = this.productId ? 'product-updated' : 'product-saved';
       this.element.dispatchEvent(new CustomEvent(eventName, {
         bubbles: true,
