@@ -12,15 +12,16 @@ export default class RangePicker {
   inputElement: HTMLDivElement | null;
   selectorElement: HTMLDivElement | null;
   private showDateFrom: Date;
-  private showDateTo: Date;
   private selectingFrom: boolean = true;
-  private DateOptions: Intl.DateTimeFormatOptions = { year: "numeric", month: "2-digit", day: "2-digit" };
+  private dateOptions: Intl.DateTimeFormatOptions = { year: "numeric", month: "2-digit", day: "2-digit" };
 
   constructor(private options: Options = {}) {
     this.from = this.options.from ?? null;
     this.to = this.options.to ?? null;
+    if (this.from && this.to && this.from > this.to) {
+      [this.from, this.to] = [this.to, this.from];
+    }
     this.showDateFrom = this.options.from ?? new Date();
-    this.showDateTo = this.options.to ?? new Date(this.showDateFrom.getFullYear(), this.showDateFrom.getMonth() + 1, 1);
     this.element = createElement(this.template);
     this.inputElement = this.element.querySelector<HTMLDivElement>('[data-element="input"]');
     this.selectorElement = this.element.querySelector<HTMLDivElement>('[data-element="selector"]');
@@ -28,8 +29,8 @@ export default class RangePicker {
   }
 
   private get template(){
-    const fromDate = this.from?.toLocaleString("ru", this.DateOptions) || '';
-    const toDate = this.to?.toLocaleString("ru", this.DateOptions) || '';
+    const fromDate = this.from?.toLocaleString("ru", this.dateOptions) || '';
+    const toDate = this.to?.toLocaleString("ru", this.dateOptions) || '';
 
     return `<div class="rangepicker">
                 <div class="rangepicker__input" data-element="input">
@@ -43,9 +44,11 @@ export default class RangePicker {
   private renderCalendar(date: Date){
     const lastDay = new Date(date.getFullYear(), date.getMonth()+1, 0).getDate();
     const monthName = date.toLocaleString('ru', { month: 'long' });
+    const monthValue = date.toLocaleString('en', { month: 'long' });
+
     let calendarHtml = `<div class="rangepicker__calendar">
                           <div class="rangepicker__month-indicator">
-                            <time datetime="December">${monthName}</time>
+                            <time datetime="${monthValue}">${monthName}</time>
                           </div>
                           <div class="rangepicker__day-of-week">
                             <div>Пн</div>
@@ -163,15 +166,14 @@ export default class RangePicker {
         this.to = date;
       }
       this.selectingFrom = true;
-      this.showDateTo = this.to??this.showDateTo;
 
       this.element?.dispatchEvent(new CustomEvent("date-select", {
         bubbles: true,
         detail: { from: this.from, to: this.to }
       }));
 
-      const fromDate = this.from?.toLocaleString("ru", this.DateOptions) || '';
-      const toDate = this.to?.toLocaleString("ru", this.DateOptions) || '';
+      const fromDate = this.from?.toLocaleString("ru", this.dateOptions) || '';
+      const toDate = this.to?.toLocaleString("ru", this.dateOptions) || '';
       const fromSpan = this.inputElement?.querySelector<HTMLSpanElement>('[data-element="from"]');
       const toSpan = this.inputElement?.querySelector<HTMLSpanElement>('[data-element="to"]');
 

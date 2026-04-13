@@ -51,9 +51,9 @@ interface SaveResult {
 export default class ProductForm {
   productId?: string;
   element: HTMLElement | null = null;
-  form: HTMLFormElement | null = null;
-  uploadBtn: HTMLButtonElement | null = null;
-  uploadInput: HTMLInputElement | null = null;
+  private form: HTMLFormElement | null = null;
+  private uploadBtn: HTMLButtonElement | null = null;
+  private uploadInput: HTMLInputElement | null = null;
   private categories: Category[] = [];
   private product: Product[] | null = null;
 
@@ -175,11 +175,11 @@ export default class ProductForm {
 
   private renderImageItem(image: ProductImage){
     return `<li class="products-edit__imagelist-item sortable-list__item">
-        <input type="hidden" name="url" value="${image.url}">
-        <input type="hidden" name="source" value="${image.source}">
+        <input type="hidden" name="url" value="${escapeHtml(image.url)}">
+        <input type="hidden" name="source" value="${escapeHtml(image.source)}">
         <span>
             <img src="icon-grab.svg" data-grab-handle="" alt="grab">
-            <img class="sortable-table__cell-img" alt="${image.source}" src="${image.url}">
+            <img class="sortable-table__cell-img" alt="${escapeHtml(image.source)}" src="${escapeHtml(image.url)}">
             <span>${escapeHtml(image.source)}</span>
         </span>
         <button type="button">
